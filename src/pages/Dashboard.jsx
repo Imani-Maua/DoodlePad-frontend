@@ -3,6 +3,7 @@ import { AuthContext } from '../context/AuthContext';
 import { notesAPI } from '../services/api';
 import NoteCard from '../components/NoteCard';
 import NoteModal from '../components/NoteModal';
+import { NotificationContext } from '../context/NotificationContext';
 
 const Dashboard = () => {
     const { user, logout } = useContext(AuthContext);
@@ -13,6 +14,7 @@ const Dashboard = () => {
     const [editingNote, setEditingNote] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
+    const { showNotification } = useContext(NotificationContext);
 
     useEffect(() => {
         fetchNotes();
@@ -53,6 +55,7 @@ const Dashboard = () => {
             setError('Failed to create note');
             console.error(err);
         }
+        showNotification("Note created successfully!", "success");
     };
 
     const handleUpdateNote = async (formData) => {
@@ -65,6 +68,7 @@ const Dashboard = () => {
             setError('Failed to update note');
             console.error(err);
         }
+        showNotification("Note updated successfully!", "success");
     };
 
     const handleDeleteNote = async (id) => {
@@ -77,6 +81,8 @@ const Dashboard = () => {
                 console.error(err);
             }
         }
+
+        showNotification("Note deleted successfully!", "success");
     };
 
     const handleEditClick = (note) => {

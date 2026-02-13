@@ -1,18 +1,22 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
+import { NotificationProvider } from './context/NotificationContext';
 import PrivateRoute from './components/PrivateRoute';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Dashboard from './pages/Dashboard';
 import About from './pages/About';
 import Navbar from './components/Navbar';
+import NotificationDisplay from './components/NotificationDisplay';
 
 function App() {
   return (
     <AuthProvider>
       <ThemeProvider>
+        <NotificationProvider>
         <Router>
+          <NotificationDisplay/>
           <div>
             <Navbar />
           </div>
@@ -29,6 +33,7 @@ function App() {
             />
           </Routes>
         </Router>
+        </NotificationProvider>
       </ThemeProvider>
     </AuthProvider>
   );

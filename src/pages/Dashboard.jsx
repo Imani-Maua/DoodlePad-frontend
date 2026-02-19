@@ -6,7 +6,7 @@ import NoteModal from '../components/NoteModal';
 import { NotificationContext } from '../context/NotificationContext';
 
 const Dashboard = () => {
-    const { user, logout } = useContext(AuthContext);
+    const { user } = useContext(AuthContext);
     const [notes, setNotes] = useState([]);
     const [filteredNotes, setFilteredNotes] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
@@ -51,38 +51,37 @@ const Dashboard = () => {
             const response = await notesAPI.createNote(formData);
             setNotes([response.data, ...notes]);
             setIsModalOpen(false);
+            showNotification("Note created successfully!", "success");
         } catch (err) {
             setError('Failed to create note');
             console.error(err);
         }
-        showNotification("Note created successfully!", "success");
     };
 
     const handleUpdateNote = async (formData) => {
         try {
-            const response = await notesAPI.updateNote(editingNote._id, formData);
-            setNotes(notes.map(note => note._id === editingNote._id ? response.data : note));
+            const response = await notesAPI.updateNote(editingNote.id, formData);
+            setNotes(notes.map(note => note.id === editingNote.id ? response.data : note));
             setIsModalOpen(false);
             setEditingNote(null);
+            showNotification("Note updated successfully!", "success");
         } catch (err) {
             setError('Failed to update note');
             console.error(err);
         }
-        showNotification("Note updated successfully!", "success");
     };
 
     const handleDeleteNote = async (id) => {
         if (window.confirm('Are you sure you want to delete this note?')) {
             try {
                 await notesAPI.deleteNote(id);
-                setNotes(notes.filter(note => note._id !== id));
+                setNotes(notes.filter(note => note.id !== id));
+                showNotification("Note deleted successfully!", "success");
             } catch (err) {
                 setError('Failed to delete note');
                 console.error(err);
             }
         }
-
-        showNotification("Note deleted successfully!", "success");
     };
 
     const handleEditClick = (note) => {
@@ -97,34 +96,11 @@ const Dashboard = () => {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-purple-50 via-indigo-50 to-pink-50">
-            {/* Header */}
-            <header className="bg-white/80 backdrop-blur-lg border-b border-gray-200 sticky top-0 z-40 shadow-sm">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex justify-between items-center h-16">
-                        <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
-                                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                </svg>
-                            </div>
-                            <div>
-                                <h1 className="text-xl font-bold text-gray-800">My Notes</h1>
-                                <p className="text-xs text-gray-500">Welcome back, {user?.name}</p>
-                            </div>
-                        </div>
-
-                        <button
-                            onClick={logout}
-                            className="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-semibold transition-colors"
-                        >
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                            </svg>
-                            Logout
-                        </button>
-                    </div>
-                </div>
-            </header>
+            {/* Page Header */}
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-2">
+                <h1 className="text-2xl font-bold text-gray-800">My Notes</h1>
+                <p className="text-sm text-gray-500">Welcome back, {user?.name}</p>
+            </div>
 
             {/* Main Content */}
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -200,7 +176,7 @@ const Dashboard = () => {
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                                 {filteredNotes.map(note => (
                                     <NoteCard
-                                        key={note._id}
+                                        key={note.id}
                                         note={note}
                                         onEdit={handleEditClick}
                                         onDelete={handleDeleteNote}

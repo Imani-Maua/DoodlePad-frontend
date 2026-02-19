@@ -16,7 +16,7 @@ const NoteCard = ({ note, onEdit, onDelete }) => {
                         </svg>
                     </button>
                     <button
-                        onClick={() => onDelete(note._id)}
+                        onClick={() => onDelete(note.id)}
                         className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                         title="Delete note"
                     >

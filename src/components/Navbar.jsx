@@ -22,7 +22,7 @@ function Navbar() {
                             </svg>
                         </div>
                         <Link to="/dashboard" className="text-lg font-bold text-gray-800 hover:text-indigo-600 transition-colors">
-                            DoodlePad
+                            DoodleMe
                         </Link>
                     </div>
 

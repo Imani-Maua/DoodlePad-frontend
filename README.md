@@ -1,4 +1,4 @@
-# 📝 Doodlepad
+# 📝 DoodleMe
 
 A full-stack notes application built with the MERN stack (MongoDB, Express.js, React, Node.js). This app allows users to create, edit, delete, and search their personal notes with a beautiful, modern UI.
 
